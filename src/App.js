@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import Home from './pages/Home';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <p>banana</p>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={ Home } />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
