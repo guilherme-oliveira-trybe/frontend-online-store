@@ -25,16 +25,9 @@ class Categories extends Component {
 
   itemCategory = async (id) => {
     const items = await itemCategory(id);
-    console.log(items);
-    this.setState(
-      // { loading: true },
-      async () => {
-        this.setState({
-          itemsResult: [...items.results],
-          // loading: false,
-        });
-      },
-    );
+    this.setState({
+      itemsResult: [...items.results],
+    });
   }
 
   render() {
@@ -56,8 +49,16 @@ class Categories extends Component {
           ))}
           {itemsResult
             .map(({ id, title, thumbnail, price }) => (
-              <div key={ id } data-testid="product">
-                <Card title={ title } thumbnail={ thumbnail } price={ price } />
+              <div
+                key={ id }
+                data-testid="product"
+              >
+                <Card
+                  productId={ id }
+                  title={ title }
+                  thumbnail={ thumbnail }
+                  price={ price }
+                />
               </div>
             ))}
         </nav>

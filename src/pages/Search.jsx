@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Card from '../components/Card';
 import { itemName } from '../services/api';
-// import { Link } from 'react-router-dom';
 
 class Search extends Component {
   constructor() {
@@ -21,26 +20,19 @@ class Search extends Component {
   itemName = async () => {
     const { search } = this.state;
     const items = await itemName(search);
-    console.log(items.results);
-    this.setState(
-      // { loading: true },
-      async () => {
-        this.setState({
-          search: '',
-          itemsResult: [...items.results],
-          // loading: false,
-        });
-      },
-    );
+    // this.setState(
+    //   async () => {
+    //     await this.setState({
+    //       search: '',
+    //       itemsResult: [...items.results],
+    //     });
+    //   },
+    // );
+    this.setState({
+      search: '',
+      itemsResult: [...items.results],
+    });
   }
-
-  // renderItems = () => {
-  //   const { search } = this.state;
-  //   console.log(itemName(search));
-  //   const searchResult = itemName(search);
-
-  //   return searchResult.map((item) => console.log(item));
-  // }
 
   render() {
     const { search, itemsResult } = this.state;
@@ -66,8 +58,16 @@ class Search extends Component {
         <div className="search-preview">
           {itemsResult
             .map(({ id, title, thumbnail, price }) => (
-              <div key={ id } data-testid="product">
-                <Card title={ title } thumbnail={ thumbnail } price={ price } />
+              <div
+                key={ id }
+                data-testid="product"
+              >
+                <Card
+                  productId={ id }
+                  title={ title }
+                  thumbnail={ thumbnail }
+                  price={ price }
+                />
               </div>
             ))}
         </div>
