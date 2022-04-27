@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Search from './Search';
 import Categories from '../components/Categories';
 
 class Home extends Component {
@@ -15,8 +16,8 @@ class Home extends Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-
         <Categories />
+        <Search />
       </div>
     );
   }
