@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
+import { getCategories, itemCategory } from '../services/api';
+import Card from './Card';
 
 class Categories extends Component {
   constructor() {
     super();
     this.state = {
       categories: [],
+      itemsResult: [],
     };
   }
 
@@ -16,8 +18,27 @@ class Categories extends Component {
     });
   }
 
+  onClick = async ({ target }) => {
+    const { id } = target;
+    await this.itemCategory(id);
+  }
+
+  itemCategory = async (id) => {
+    const items = await itemCategory(id);
+    console.log(items);
+    this.setState(
+      // { loading: true },
+      async () => {
+        this.setState({
+          itemsResult: [...items.results],
+          // loading: false,
+        });
+      },
+    );
+  }
+
   render() {
-    const { categories } = this.state;
+    const { categories, itemsResult } = this.state;
     return (
       <div className="navigation-container">
         <h1>Categorias:</h1>
@@ -28,9 +49,17 @@ class Categories extends Component {
                 type="button"
                 data-testid="category"
                 value={ name }
+                onClick={ this.onClick }
+                id={ id }
               />
             </div>
           ))}
+          {itemsResult
+            .map(({ id, title, thumbnail, price }) => (
+              <div key={ id } data-testid="product">
+                <Card title={ title } thumbnail={ thumbnail } price={ price } />
+              </div>
+            ))}
         </nav>
       </div>
     );
