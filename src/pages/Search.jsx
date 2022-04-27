@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Card from '../components/Card';
 import { itemName } from '../services/api';
 // import { Link } from 'react-router-dom';
 
@@ -66,17 +67,8 @@ class Search extends Component {
           {itemsResult
             .map(({ id, title, thumbnail, price }) => (
               <div key={ id } data-testid="product">
-                <h1>{title}</h1>
-                <img
-                  src={ thumbnail }
-                  alt={ title }
-                />
-                <p>
-                  {' '}
-                  {price}
-                </p>
+                <Card title={ title } thumbnail={ thumbnail } price={ price } />
               </div>
-
             ))}
         </div>
       </div>
