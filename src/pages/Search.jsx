@@ -6,7 +6,7 @@ class Search extends Component {
   constructor() {
     super();
     this.state = {
-      loading: false,
+      // loading: false,
       search: '',
       itemsResult: [],
     };
@@ -17,17 +17,17 @@ class Search extends Component {
     this.setState({ search: value });
   }
 
-  searchArtists = async () => {
+  itemName = async () => {
     const { search } = this.state;
     const items = await itemName(search);
     console.log(items.results);
     this.setState(
-      { loading: true },
+      // { loading: true },
       async () => {
         this.setState({
           search: '',
           itemsResult: [...items.results],
-          loading: false,
+          // loading: false,
         });
       },
     );
@@ -42,9 +42,10 @@ class Search extends Component {
   // }
 
   render() {
-    const { search } = this.state;
+    const { search, itemsResult } = this.state;
     const minLenght = 0;
     return (
+
       <div>
         <input
           data-testid="query-input"
@@ -57,12 +58,26 @@ class Search extends Component {
           data-testid="query-button"
           type="submit"
           disabled={ search.length < minLenght }
-          onClick={ this.searchArtists }
+          onClick={ this.itemName }
         >
           Pesquisar
         </button>
         <div className="search-preview">
-          preview
+          {itemsResult
+            .map(({ id, title, thumbnail, price }) => (
+              <div key={ id } data-testid="product">
+                <h1>{title}</h1>
+                <img
+                  src={ thumbnail }
+                  alt={ title }
+                />
+                <p>
+                  {' '}
+                  {price}
+                </p>
+              </div>
+
+            ))}
         </div>
       </div>
     );
