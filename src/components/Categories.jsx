@@ -25,16 +25,9 @@ class Categories extends Component {
 
   itemCategory = async (id) => {
     const items = await itemCategory(id);
-    console.log(items);
-    this.setState(
-      // { loading: true },
-      async () => {
-        this.setState({
-          itemsResult: [...items.results],
-          // loading: false,
-        });
-      },
-    );
+    this.setState({
+      itemsResult: [...items.results],
+    });
   }
 
   render() {
