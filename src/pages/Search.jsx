@@ -66,8 +66,16 @@ class Search extends Component {
         <div className="search-preview">
           {itemsResult
             .map(({ id, title, thumbnail, price }) => (
-              <div key={ id } data-testid="product">
-                <Card title={ title } thumbnail={ thumbnail } price={ price } />
+              <div
+                key={ id }
+                data-testid="product"
+              >
+                <Card
+                  productId={ id }
+                  title={ title }
+                  thumbnail={ thumbnail }
+                  price={ price }
+                />
               </div>
             ))}
         </div>
