@@ -6,6 +6,7 @@ class Cart extends Component {
 
     this.state = {
       cartItems: [],
+      isCartEmpty: true,
     };
   }
 
@@ -14,9 +15,11 @@ class Cart extends Component {
       localStorage.setItem('cartItems', JSON.stringify([]));
     }
     const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-    this.setState({
-      cartItems,
-    });
+    this.setState(
+      ({
+        cartItems,
+      }), () => this.checkCartProducts(),
+    );
   }
 
   getProductQuantity(id) {
@@ -26,12 +29,20 @@ class Cart extends Component {
     return numOfItems;
   }
 
-  render() {
+  checkCartProducts = () => {
     const { cartItems } = this.state;
+    const isCartEmpty = cartItems.length === 0;
+    this.setState({
+      isCartEmpty,
+    });
+  }
+
+  render() {
+    const { cartItems, isCartEmpty } = this.state;
     return (
       <div>
         {
-          !cartItems
+          isCartEmpty
             ? (
               <h2 data-testid="shopping-cart-empty-message">
                 Seu carrinho está vazio
