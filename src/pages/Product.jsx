@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { itemDetails } from '../services/api';
 import Loading from '../components/Loading';
+import ReviewForm from '../components/ReviewForm';
 
 class Product extends Component {
   constructor(props) {
@@ -85,25 +86,28 @@ class Product extends Component {
             </Link>
           </nav>
         </div>
-        <div>
-          <img
-            src={ thumbnail }
-            alt={ title }
-          />
-        </div>
         { loading
           ? <Loading /> : (
-            <div>
-              { condition === 'new' ? <p>Novo</p> : <p>Usado</p> }
-              <h1 data-testid="product-detail-name">{title}</h1>
-              <p>{`R$ ${price}`}</p>
-              <input
-                data-testid="product-detail-add-to-cart"
-                type="button"
-                value="Adicionar ao carrinho"
-                onClick={ () => this.sendtToCart() }
-              />
-            </div>
+            <>
+              <div className="product-images">
+                <img
+                  src={ thumbnail }
+                  alt={ title }
+                />
+              </div>
+              <div className="product-card">
+                { condition === 'new' ? <p>Novo</p> : <p>Usado</p> }
+                <h1 data-testid="product-detail-name">{title}</h1>
+                <p>{`R$ ${price}`}</p>
+                <input
+                  data-testid="product-detail-add-to-cart"
+                  type="button"
+                  value="Adicionar ao carrinho"
+                  onClick={ () => this.sendtToCart() }
+                />
+              </div>
+              <ReviewForm />
+            </>
           ) }
       </section>
     );
