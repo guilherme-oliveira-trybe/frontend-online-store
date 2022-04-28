@@ -18,6 +18,10 @@ class Product extends Component {
   componentDidMount = async () => {
     await this.getProductId();
     await this.fetchItemDetails();
+    if (!JSON.parse(localStorage.getItem('cartItems'))) {
+      localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    JSON.parse(localStorage.getItem('cartItems'));
   }
 
   getProductId = async () => {
@@ -43,6 +47,17 @@ class Product extends Component {
     );
   }
 
+  sendtToCart = () => {
+    this.addToLocalStorage();
+  }
+
+  addToLocalStorage = () => {
+    const { productDetails } = this.state;
+    const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
+    const cartItems = [...prevCartItems, productDetails];
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }
+
   render() {
     const {
       loading,
@@ -64,6 +79,7 @@ class Product extends Component {
             </Link>
             <Link
               to="/cart"
+              data-testid="shopping-cart-button"
             >
               Carrinho
             </Link>
@@ -81,6 +97,12 @@ class Product extends Component {
               { condition === 'new' ? <p>Novo</p> : <p>Usado</p> }
               <h1 data-testid="product-detail-name">{title}</h1>
               <p>{`R$ ${price}`}</p>
+              <input
+                data-testid="product-detail-add-to-cart"
+                type="button"
+                value="Adicionar ao carrinho"
+                onClick={ () => this.sendtToCart() }
+              />
             </div>
           ) }
       </section>
