@@ -6,10 +6,31 @@ class Search extends Component {
   constructor() {
     super();
     this.state = {
-      // loading: false,
       search: '',
       itemsResult: [],
     };
+  }
+
+  componentDidMount = () => {
+    if (!JSON.parse(localStorage.getItem('cartItems'))) {
+      localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    JSON.parse(localStorage.getItem('cartItems'));
+  }
+
+  sendToCart = (productObj) => {
+    this.addToLocalStorage(productObj);
+    console.log('clicou');
+  }
+
+  addToLocalStorage = (productObj) => {
+    if (!JSON.parse(localStorage.getItem('cartItems'))) {
+      localStorage.setItem('cartItems', JSON.stringify([]));
+    } else {
+      const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
+      const CartItems = [...prevCartItems, productObj];
+      localStorage.setItem('cartItems', JSON.stringify(CartItems));
+    }
   }
 
   inputHandleChange = ({ target }) => {
@@ -20,14 +41,6 @@ class Search extends Component {
   itemName = async () => {
     const { search } = this.state;
     const items = await itemName(search);
-    // this.setState(
-    //   async () => {
-    //     await this.setState({
-    //       search: '',
-    //       itemsResult: [...items.results],
-    //     });
-    //   },
-    // );
     this.setState({
       search: '',
       itemsResult: [...items.results],
@@ -38,7 +51,6 @@ class Search extends Component {
     const { search, itemsResult } = this.state;
     const minLenght = 0;
     return (
-
       <div>
         <input
           data-testid="query-input"
@@ -57,16 +69,17 @@ class Search extends Component {
         </button>
         <div className="search-preview">
           {itemsResult
-            .map(({ id, title, thumbnail, price }) => (
+            .map((product) => (
               <div
-                key={ id }
+                key={ product.id }
                 data-testid="product"
               >
                 <Card
-                  productId={ id }
-                  title={ title }
-                  thumbnail={ thumbnail }
-                  price={ price }
+                  productId={ product.id }
+                  title={ product.title }
+                  thumbnail={ product.thumbnail }
+                  price={ product.price }
+                  onClick={ () => this.sendToCart(product) }
                 />
               </div>
             ))}

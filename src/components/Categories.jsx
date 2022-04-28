@@ -18,6 +18,21 @@ class Categories extends Component {
     });
   }
 
+  sendToCart = (productObj) => {
+    this.addToLocalStorage(productObj);
+    console.log('clicou');
+  }
+
+  addToLocalStorage = (productObj) => {
+    if (!JSON.parse(localStorage.getItem('cartItems'))) {
+      localStorage.setItem('cartItems', JSON.stringify([]));
+    } else {
+      const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
+      const CartItems = [...prevCartItems, productObj];
+      localStorage.setItem('cartItems', JSON.stringify(CartItems));
+    }
+  }
+
   onClick = async ({ target }) => {
     const { id } = target;
     await this.itemCategory(id);
@@ -48,16 +63,17 @@ class Categories extends Component {
             </div>
           ))}
           {itemsResult
-            .map(({ id, title, thumbnail, price }) => (
+            .map((product) => (
               <div
-                key={ id }
+                key={ product.id }
                 data-testid="product"
               >
                 <Card
-                  productId={ id }
-                  title={ title }
-                  thumbnail={ thumbnail }
-                  price={ price }
+                  productId={ product.id }
+                  title={ product.title }
+                  thumbnail={ product.thumbnail }
+                  price={ product.price }
+                  onClick={ () => this.sendToCart(product) }
                 />
               </div>
             ))}
