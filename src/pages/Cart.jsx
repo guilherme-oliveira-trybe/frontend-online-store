@@ -5,6 +5,7 @@ class Cart extends Component {
     return (
       <div>
         <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>
+        {/* Daniel esteve aqui */}
       </div>
     );
   }
