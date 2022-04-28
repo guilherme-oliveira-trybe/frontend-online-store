@@ -62,6 +62,7 @@ export default class ReviewForm extends Component {
                 placeholder="Obrigatório"
                 value={ email }
                 onChange={ this.formHandler }
+                data-testid="product-detail-email"
               />
             </fieldset>
             <fieldset>
@@ -122,6 +123,7 @@ export default class ReviewForm extends Component {
               type="button"
               value="Avaliar"
               disabled={ !validForm }
+              data-testid="submit-review-btn"
             />
           </fieldset>
         </form>
