@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class Card extends Component {
   render() {
-    const { productId, thumbnail, title, price } = this.props;
+    const { productId, thumbnail, title, price, onClick } = this.props;
     return (
       <div>
         <Link
@@ -21,6 +21,12 @@ class Card extends Component {
             {`R$ ${price}`}
           </p>
         </Link>
+        <input
+          data-testid="product-add-to-cart"
+          type="button"
+          value="Adicionar ao carrinho"
+          onClick={ onClick }
+        />
       </div>
     );
   }
@@ -31,6 +37,7 @@ Card.propTypes = {
   thumbnail: PropTypes.string,
   title: PropTypes.string,
   price: PropTypes.string,
+  onClick: PropTypes.func,
 }.isRequired;
 
 export default Card;
