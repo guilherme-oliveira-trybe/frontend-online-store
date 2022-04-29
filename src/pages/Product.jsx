@@ -12,6 +12,7 @@ class Product extends Component {
     this.state = {
       productId: '',
       productDetails: [],
+      productAttributes: [],
       loading: false,
     };
   }
@@ -43,9 +44,17 @@ class Product extends Component {
         this.setState({
           loading: false,
           productDetails,
-        });
+        }, () => this.getItemAttributes());
       },
     );
+  }
+
+  getItemAttributes = () => {
+    const { productDetails } = this.state;
+    const productAttributes = productDetails.attributes;
+    this.setState({
+      productAttributes,
+    });
   }
 
   sendtToCart = () => {
@@ -68,6 +77,7 @@ class Product extends Component {
         title,
         thumbnail,
       },
+      productAttributes,
     } = this.state;
     return (
       <section>
@@ -105,6 +115,20 @@ class Product extends Component {
                   value="Adicionar ao carrinho"
                   onClick={ () => this.sendtToCart() }
                 />
+              </div>
+              <div className="product-description">
+                <h2>Detalhes do Produto</h2>
+                <div>
+                  {
+                    productAttributes
+                      .map((attr) => (
+                        <div key={ attr.name }>
+                          <span>{`${attr.name}: `}</span>
+                          <span>{attr.value_name}</span>
+                        </div>
+                      ))
+                  }
+                </div>
               </div>
               <ReviewForm />
             </>
