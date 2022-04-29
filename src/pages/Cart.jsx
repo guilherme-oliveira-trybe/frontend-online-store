@@ -37,6 +37,29 @@ class Cart extends Component {
     });
   }
 
+  increaseItem(id) {
+    const { cartItems } = this.state;
+    const add = cartItems.find((item) => id === item.id);
+    console.log(add);
+    this.setState((prevState) => ({
+      cartItems: [...prevState.cartItems, add],
+    }));
+  }
+
+  decreaseItem(id) {
+    const { cartItems } = this.state;
+    cartItems.splice(id, 1);
+    this.setState({
+      cartItems,
+    });
+  }
+
+  totalPrice(price, id) {
+    const quantity = this.getProductQuantity(id);
+    const total = quantity * price;
+    return total;
+  }
+
   render() {
     const { cartItems, isCartEmpty } = this.state;
     return (
@@ -59,10 +82,25 @@ class Cart extends Component {
                     alt={ title }
                   />
                   <p>{`R$ ${price}`}</p>
-                  <span>Quantidade: </span>
-                  <span data-testid="shopping-cart-product-quantity">
-                    { this.getProductQuantity(id) }
-                  </span>
+                  <div>
+                    <span>Quantidade: </span>
+                    <input
+                      data-testid="product-decrease-quantity"
+                      type="button"
+                      value="-"
+                      onClick={ () => this.decreaseItem(id) }
+                    />
+                    <span data-testid="shopping-cart-product-quantity">
+                      { this.getProductQuantity(id) }
+                    </span>
+                    <input
+                      data-testid="product-increase-quantity"
+                      type="button"
+                      value="+"
+                      onClick={ () => this.increaseItem(id) }
+                    />
+                    <span>{`Total: R$ ${this.totalPrice(price, id)}`}</span>
+                  </div>
                 </div>
               ))
         }
