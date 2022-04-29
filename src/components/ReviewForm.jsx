@@ -10,8 +10,24 @@ export default class ReviewForm extends Component {
         rating: 1,
         review: '',
       },
+      userReview: {},
+      prevUserReview: [],
       validForm: false,
     };
+  }
+
+  componentDidMount() {
+    this.getUserReview();
+  }
+
+  getUserReview = () => {
+    if (!JSON.parse(localStorage.getItem('userReview'))) {
+      localStorage.setItem('userReview', JSON.stringify([]));
+    }
+    const prevUserReview = JSON.parse(localStorage.getItem('userReview'));
+    this.setState({
+      prevUserReview,
+    });
   }
 
   formHandler = ({ target: { name, value } }) => {
@@ -51,7 +67,15 @@ export default class ReviewForm extends Component {
         rating: 1,
         review: '',
       },
-    }, () => this.validadeSubmission());
+    }, () => {
+      this.validadeSubmission();
+      this.saveReview();
+    });
+  }
+
+  saveReview = () => {
+    const { userReview, prevUserReview } = this.state;
+    localStorage.setItem('userReview', JSON.stringify([...prevUserReview, userReview]));
   }
 
   render() {
@@ -60,6 +84,8 @@ export default class ReviewForm extends Component {
         email,
         review,
       },
+      userReview,
+      prevUserReview,
       validForm,
     } = this.state;
     return (
@@ -141,6 +167,31 @@ export default class ReviewForm extends Component {
             />
           </fieldset>
         </form>
+        <div className="user-curr-review">
+          { !!Object.entries(userReview).length
+          && (
+            <>
+              <span>{`${userReview.email} `}</span>
+              <span>{`${userReview.rating} ESTRELAS`}</span>
+              <p>{userReview.review}</p>
+            </>
+          )}
+        </div>
+        { prevUserReview
+          && (
+            <div className="user-reviews">
+              {
+                prevUserReview
+                  .map((reviewer, index) => (
+                    <div key={ index }>
+                      <span>{`${reviewer.email} `}</span>
+                      <span>{`${reviewer.rating} ESTRELAS`}</span>
+                      <p>{reviewer.review}</p>
+                    </div>
+                  ))
+              }
+            </div>
+          ) }
       </div>
     );
   }
