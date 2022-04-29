@@ -6,6 +6,7 @@ class Cart extends Component {
 
     this.state = {
       cartItems: [],
+      filteredCartItems: [],
       isCartEmpty: true,
     };
   }
@@ -18,7 +19,10 @@ class Cart extends Component {
     this.setState(
       ({
         cartItems,
-      }), () => this.checkCartProducts(),
+      }), () => {
+        this.checkCartProducts();
+        this.filterCartItems();
+      },
     );
   }
 
@@ -29,6 +33,28 @@ class Cart extends Component {
     return numOfItems;
   }
 
+  filterCartItems = () => {
+    const { cartItems } = this.state;
+    const filteredCartItems = cartItems
+      .filter((product, i, arr) => i === arr
+        .findIndex((curr) => curr.id === product.id));
+    this.setState({
+      filteredCartItems,
+    });
+  }
+
+  // newCartObj = () => {
+  //   const { filteredCartItems } = this.state;
+  //   cartItems = filteredCartItems
+  //     .map(({
+  //       attributes,
+  //       id,
+  //       price,
+  //       title,
+  //       thumbnail,
+  //     }) => );
+  // }
+
   checkCartProducts = () => {
     const { cartItems } = this.state;
     const isCartEmpty = cartItems.length === 0;
@@ -38,7 +64,7 @@ class Cart extends Component {
   }
 
   render() {
-    const { cartItems, isCartEmpty } = this.state;
+    const { filteredCartItems, isCartEmpty } = this.state;
     return (
       <div>
         {
@@ -48,7 +74,7 @@ class Cart extends Component {
                 Seu carrinho está vazio
               </h2>
             )
-            : cartItems
+            : filteredCartItems
               .map(({ id, thumbnail, title, price }) => (
                 <div key={ id }>
                   <h1 data-testid="shopping-cart-product-name">
