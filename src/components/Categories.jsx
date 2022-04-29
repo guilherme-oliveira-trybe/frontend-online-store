@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getCategories, itemCategory } from '../services/api';
 import Card from './Card';
+import './Categories.css';
 
 class Categories extends Component {
   constructor() {
@@ -48,20 +49,26 @@ class Categories extends Component {
   render() {
     const { categories, itemsResult } = this.state;
     return (
-      <div className="navigation-container">
-        <h1>Categorias:</h1>
-        <nav>
-          {categories.map(({ id, name }) => (
-            <div key={ id }>
-              <input
-                type="button"
-                data-testid="category"
-                value={ name }
-                onClick={ this.onClick }
-                id={ id }
-              />
-            </div>
-          ))}
+      <>
+        <div className="navigation-container">
+          <h1>Categorias:</h1>
+          <nav>
+            {categories.map(({ id, name }) => (
+              <div key={ id }>
+                <input
+                  type="button"
+                  data-testid="category"
+                  value={ name }
+                  onClick={ this.onClick }
+                  id={ id }
+                />
+              </div>
+
+            ))}
+          </nav>
+        </div>
+
+        <div className="product-container">
           {itemsResult
             .map((product) => (
               <div
@@ -77,8 +84,8 @@ class Categories extends Component {
                 />
               </div>
             ))}
-        </nav>
-      </div>
+        </div>
+      </>
     );
   }
 }
