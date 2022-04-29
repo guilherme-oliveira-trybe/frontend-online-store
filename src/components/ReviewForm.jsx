@@ -41,6 +41,19 @@ export default class ReviewForm extends Component {
     });
   }
 
+  submitReview = () => {
+    const { reviewForm } = this.state;
+    const userReview = reviewForm;
+    this.setState({
+      userReview,
+      reviewForm: {
+        email: '',
+        rating: 1,
+        review: '',
+      },
+    }, () => this.validadeSubmission());
+  }
+
   render() {
     const {
       reviewForm: {
@@ -124,6 +137,7 @@ export default class ReviewForm extends Component {
               value="Avaliar"
               disabled={ !validForm }
               data-testid="submit-review-btn"
+              onClick={ this.submitReview }
             />
           </fieldset>
         </form>
