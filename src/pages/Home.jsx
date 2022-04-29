@@ -6,19 +6,23 @@ import Categories from '../components/Categories';
 class Home extends Component {
   render() {
     return (
-      <div>
+      <main>
         <Link to="/cart" data-testid="shopping-cart-button">
-          <input
+          <button
             type="button"
             value="Carrinho"
-          />
+          >
+            Seu carrinho
+            {' '}
+            <i className="fa fa-shopping-cart" />
+          </button>
         </Link>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
         <Categories />
         <Search />
-      </div>
+      </main>
     );
   }
 }
