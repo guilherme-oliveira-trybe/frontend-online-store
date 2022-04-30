@@ -20,7 +20,6 @@ class Search extends Component {
 
   sendToCart = (productObj) => {
     this.addToLocalStorage(productObj);
-    console.log('clicou');
   }
 
   addToLocalStorage = (productObj) => {
