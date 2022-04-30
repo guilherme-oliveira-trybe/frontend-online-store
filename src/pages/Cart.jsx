@@ -77,11 +77,19 @@ class Cart extends Component {
     }
   }
 
-  increaseItem(item) {
-    this.setState((prevState) => ({
-      cartItems: [...prevState.cartItems, item],
-    }));
-    this.addToLocalStorage(item);
+  checkQuantityLimit(item) {
+    const itemLimit = 0;
+    console.log(item.available_quantity);
+    return itemLimit;
+  }
+
+  increaseItem(item, avb) {
+    if (item.available_quantity > avb) {
+      this.setState((prevState) => ({
+        cartItems: [...prevState.cartItems, item],
+      }));
+      this.addToLocalStorage(item);
+    }
   }
 
   decreaseItem(id) {
@@ -133,7 +141,8 @@ class Cart extends Component {
                   type="button"
                   value="+"
                   // onClick={ () => this.increaseItem(id) }
-                  onClick={ () => this.increaseItem(item) }
+                  onClick={ () => this.increaseItem(item,
+                    this.getProductQuantity(item.id)) }
                 />
                 <span>{`Total: R$ ${this.totalPrice(item.price, item.id)}`}</span>
               </div>
