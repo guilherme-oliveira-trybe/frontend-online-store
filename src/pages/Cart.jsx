@@ -77,12 +77,6 @@ class Cart extends Component {
     }
   }
 
-  checkQuantityLimit(item) {
-    const itemLimit = 0;
-    console.log(item.available_quantity);
-    return itemLimit;
-  }
-
   increaseItem(item, avb) {
     if (item.available_quantity > avb) {
       this.setState((prevState) => ({
