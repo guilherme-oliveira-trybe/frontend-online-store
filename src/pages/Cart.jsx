@@ -28,9 +28,20 @@ class Cart extends Component {
 
   getProductQuantity(id) {
     const { cartItems } = this.state;
-    const numOfItems = cartItems
-      .filter((product) => id === product.id).length;
-    return numOfItems;
+    console.log(cartItems);
+    console.log(cartItems.length);
+
+    const numOfItems = cartItems.splice();
+    if (numOfItems !== undefined) {
+      return numOfItems.filter((product) => id === product.id).length;
+    }
+    // if(numOfItems)
+    // console.log(numOfItems);
+    // if (numOfItems === undefined) return 1;
+    // if (numOfItems === undefined) return 1;
+    // const numOfItems = cartItems
+    //   .filter((product) => id === product.id).length;
+    // return numOfItems;
   }
 
   filterCartItems = () => {
@@ -57,15 +68,38 @@ class Cart extends Component {
     this.setState((prevState) => ({
       cartItems: [...prevState.cartItems, add],
     }));
+    // }), () => localStorage.setItem('cartItems', JSON.stringify(cartItems)));
+    // const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
+    // const cartItemsTeste = [...prevCartItems, cartItems];
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }
 
-  decreaseItem(id) {
+  decreaseItem(id, index) {
     const { cartItems } = this.state;
-    cartItems.splice(id, 1);
+    // console.log(cartItems);
+    // console.log(id);
+    // console.log(index);
+    const tempCartItems = cartItems.slice();
+    const removed = tempCartItems.splice(index, 1);
+    // console.log(tempCartItems);
+    console.log(removed);
     this.setState({
-      cartItems,
+      cartItems: tempCartItems,
+      // cartItems: newcartItems,
     });
+    // }, () => localStorage.setItem('cartItems', JSON.stringify(cartItems)));
+    // const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
+    // const cartItemsTeste = [...prevCartItems, cartItems];
+    localStorage.setItem('cartItems', JSON.stringify(tempCartItems));
   }
+
+  // decreaseItem(id) {
+  //   const { cartItems } = this.state;
+  //   cartItems.splice(id, 1);
+  //   this.setState({
+  //     cartItems,
+  //   });
+  // }
 
   totalPrice(price, id) {
     const quantity = this.getProductQuantity(id);
@@ -85,7 +119,7 @@ class Cart extends Component {
               </h2>
             )
             : filteredCartItems
-              .map(({ id, thumbnail, title, price }) => (
+              .map(({ id, thumbnail, title, price }, index) => (
                 <div key={ id }>
                   <h1 data-testid="shopping-cart-product-name">
                     {title}
@@ -101,7 +135,7 @@ class Cart extends Component {
                       data-testid="product-decrease-quantity"
                       type="button"
                       value="-"
-                      onClick={ () => this.decreaseItem(id) }
+                      onClick={ () => this.decreaseItem(id, index) }
                     />
                     <span data-testid="shopping-cart-product-quantity">
                       { this.getProductQuantity(id) }
