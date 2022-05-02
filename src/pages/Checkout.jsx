@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Form from '../components/Form';
-// import Util from '../utils/util';
 
 class Checkout extends Component {
   constructor() {
@@ -11,19 +10,6 @@ class Checkout extends Component {
       filteredCartItems: [],
       sumItems: [],
       subtotal: 0,
-      customerForm: {
-        fullName: '',
-        email: '',
-        cpf: '',
-        address: '',
-        cep: '',
-        phone: '',
-        homeNumber: '',
-        city: '',
-        estate: '',
-        complement: '',
-      },
-      // validForm: false,
     };
   }
 
@@ -58,12 +44,11 @@ class Checkout extends Component {
     });
   }
 
-  // formHandler = ({ target: { value } }) => {
-  //   // const { name } = this.state;
+  // formHandler = ({ target: { name, value } }) => {
   //   this.setState((prevState) => ({
   //     customerForm: {
   //       ...prevState.customerForm,
-  //       name: value,
+  //       [name]: value,
   //     },
   //   }), () => this.validadeSubmission());
   // }
@@ -130,11 +115,7 @@ class Checkout extends Component {
   }
 
   render() {
-    const { filteredCartItems,
-      customerForm: { name, email, address,
-        cpf, cep, phone, homeNumber, estate, city, complement },
-      isValid,
-    } = this.state;
+    const { filteredCartItems } = this.state;
     return (
       <>
         <div>
@@ -171,18 +152,9 @@ class Checkout extends Component {
         <br />
         <div>
           <Form
-            state={ { customerForm:
-          { name, email, address, cpf, cep, phone, homeNumber, estate, city, complement },
-            } }
+            onChange={ this.formHandler }
           />
         </div>
-        <button
-          type="button"
-          value="Comprar"
-          disabled={ !isValid }
-        >
-          Comprar
-        </button>
       </>
     );
   }

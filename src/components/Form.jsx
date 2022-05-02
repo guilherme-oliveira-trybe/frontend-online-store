@@ -1,26 +1,107 @@
 import React, { Component } from 'react';
-import Input from './Input';
 import PropTypes from 'prop-types';
-import Util from '../utils/util';
+import Input from './Input';
 
 class Form extends Component {
+  constructor() {
+    super();
+    this.state = {
+      customerForm: {
+        fullName: '',
+        email: '',
+        cpf: '',
+        address: '',
+        cep: '',
+        phone: '',
+        homeNumber: '',
+        city: '',
+        estate: '',
+        complement: '',
+      },
+      validForm: false,
+    };
+  }
+
+  clearState = () => {
+    this.setState({
+      customerForm: {
+        fullName: '',
+        email: '',
+        cpf: '',
+        address: '',
+        cep: '',
+        phone: '',
+        homeNumber: '',
+        city: '',
+        estate: '',
+        complement: '',
+      },
+      validForm: false,
+    });
+  }
+
+  formHandler = ({ target: { name, value } }) => {
+    // name.type === radio ? name.checked === true : name.checked === false;
+    this.setState((prevState) => ({
+      customerForm: {
+        ...prevState.customerForm,
+        [name]: value,
+      },
+    }), () => this.validadeSubmission());
+  }
+
+  validadeSubmission = () => {
+    const {
+      customerForm: {
+        fullName,
+        email,
+        cpf,
+        address,
+        cep,
+        phone,
+        homeNumber,
+        city,
+        estate,
+        complement,
+      },
+    } = this.state;
+    const errorCases = [
+      !fullName.length,
+      !email.length,
+      !cpf,
+      !address,
+      !cep,
+      !phone,
+      !homeNumber,
+      !city,
+      !estate,
+      !complement,
+    ];
+    const validForm = errorCases
+      .every((error) => error === false);
+    this.setState({
+      validForm,
+    });
+  }
+
   render() {
-    const { state: { name, email, address, cpf, cep, phone, homeNumber, estate, city, complement } } = this.props;
+    const { customerForm: { fullName, email, cpf, address, cep,
+      phone, homeNumber, city, estate, complement }, validForm } = this.state;
     return (
       <div>
         <fieldset>
           <h3>Informações do Comprador</h3>
           <Input
             type="text"
-            name="full-name"
+            name="fullName"
             placeHolder="Nome Completo"
-            value={ name }
-            onChange={ Util.formHandler }
+            value={ fullName }
+            onChange={ this.formHandler }
             data-testid="checkout-fullname"
           />
           <Input
             type="text"
-            name="emai"
+            name="email"
             placeHolder="Email"
             value={ email }
             onChange={ this.formHandler }
@@ -52,15 +133,15 @@ class Form extends Component {
           />
           <Input
             type="text"
-            name="pheon-number"
+            name="phone"
             placeHolder="Telefone"
             value={ phone }
             onChange={ this.formHandler }
-            data-testid="checkout-phone-number"
+            data-testid="checkout-phone"
           />
           <Input
             type="text"
-            name="house-number"
+            name="homeNumber"
             placeHolder="Número"
             value={ homeNumber }
             onChange={ this.formHandler }
@@ -92,51 +173,76 @@ class Form extends Component {
           <h3>Método de Pagamento</h3>
           <div>
             Boleto
-            <input
-              type="radio"
-              name="rating"
-              id="1-rating"
-              value="1"
-              // onChange={ this.formHandler }
-            />
+            <label htmlFor="boleto">
+              <input
+                id="boleto"
+                type="radio"
+                name="payment"
+                value="boleto"
+                onChange={ this.formHandler }
+              />
+            </label>
           </div>
+          <hr />
           <div>
-            Cartão de Crédito
-            <input
-              type="radio"
-              name="rating"
-              id="1-rating"
-              value="2"
-              // onChange={ this.formHandler }
-            />
-            <input
-              type="radio"
-              name="rating"
-              id="1-rating"
-              value="3"
-              // onChange={ this.formHandler }
-            />
-            <input
-              type="radio"
-              name="rating"
-              id="1-rating"
-              value="4"
-              // onChange={ this.formHandler }
-            />
+            Cartão de Crédito:
+            <br />
+            <label htmlFor="american-express">
+              <input
+                id="american-express"
+                type="radio"
+                name="payment"
+                value="american-express"
+                onChange={ this.formHandler }
+              />
+              American Express
+            </label>
+            <label htmlFor="visa">
+              <input
+                id="visa"
+                type="radio"
+                name="payment"
+                value="visa"
+                onChange={ this.formHandler }
+              />
+              Visa
+            </label>
+            <label htmlFor="mastercard">
+              <input
+                id="mastercard"
+                type="radio"
+                name="payment"
+                value="mastercard"
+                onChange={ this.formHandler }
+              />
+              Mastercard
+            </label>
           </div>
         </fieldset>
+        <button
+          type="button"
+          value="Comprar"
+          disabled={ !validForm }
+          onClick={ this.clearState }
+        >
+          Comprar
+        </button>
       </div>
     );
   }
 }
 
-Input.propTypes = {
-  type: PropTypes.string,
+Form.propTypes = {
   name: PropTypes.string,
-  placeholder: PropTypes.string,
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-  dataTestid: PropTypes.string,
+  email: PropTypes.string,
+  address: PropTypes.string,
+  cpf: PropTypes.string,
+  cep: PropTypes.string,
+  phone: PropTypes.string,
+  homeNumber: PropTypes.string,
+  estate: PropTypes.string,
+  city: PropTypes.string,
+  complement: PropTypes.string,
 }.isRequired;
 
 export default Form;
