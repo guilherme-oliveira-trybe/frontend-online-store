@@ -41,7 +41,6 @@ class Form extends Component {
   }
 
   formHandler = ({ target: { name, value } }) => {
-    // name.type === radio ? name.checked === true : name.checked === false;
     this.setState((prevState) => ({
       customerForm: {
         ...prevState.customerForm,
@@ -97,7 +96,7 @@ class Form extends Component {
             placeHolder="Nome Completo"
             value={ fullName }
             onChange={ this.formHandler }
-            data-testid="checkout-fullname"
+            dataTestid="checkout-fullname"
           />
           <Input
             type="text"
@@ -105,7 +104,7 @@ class Form extends Component {
             placeHolder="Email"
             value={ email }
             onChange={ this.formHandler }
-            data-testid="checkout-email"
+            dataTestid="checkout-email"
           />
           <Input
             type="text"
@@ -113,7 +112,7 @@ class Form extends Component {
             placeHolder="Endereço"
             value={ address }
             onChange={ this.formHandler }
-            data-testid="checkout-address"
+            dataTestid="checkout-address"
           />
           <Input
             type="text"
@@ -121,7 +120,7 @@ class Form extends Component {
             placeHolder="CPF"
             value={ cpf }
             onChange={ this.formHandler }
-            data-testid="checkout-cpf"
+            dataTestid="checkout-cpf"
           />
           <Input
             type="text"
@@ -129,7 +128,7 @@ class Form extends Component {
             placeHolder="CEP"
             value={ cep }
             onChange={ this.formHandler }
-            data-testid="checkout-cep"
+            dataTestid="checkout-cep"
           />
           <Input
             type="text"
@@ -137,7 +136,7 @@ class Form extends Component {
             placeHolder="Telefone"
             value={ phone }
             onChange={ this.formHandler }
-            data-testid="checkout-phone"
+            dataTestid="checkout-phone"
           />
           <Input
             type="text"
