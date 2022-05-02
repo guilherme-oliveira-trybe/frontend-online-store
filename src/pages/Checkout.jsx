@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Form from '../components/Form';
+// import Util from '../utils/util';
 
 class Checkout extends Component {
   constructor() {
@@ -8,6 +10,7 @@ class Checkout extends Component {
       cartItems: [],
       filteredCartItems: [],
       sumItems: [],
+      subtotal: 0,
       customerForm: {
         fullName: '',
         email: '',
@@ -20,7 +23,7 @@ class Checkout extends Component {
         estate: '',
         complement: '',
       },
-      validForm: false,
+      // validForm: false,
     };
   }
 
@@ -29,69 +32,75 @@ class Checkout extends Component {
       localStorage.setItem('cartItems', JSON.stringify([]));
     }
     const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-    this.setState(
-      {
-        cartItems,
-      },
-      () => {
-        this.filterCartItems();
-      },
-    );
-  };
+    this.setState(({
+      cartItems,
+    }), () => this.filterCartItems());
+  }
 
   getProductQuantity(id) {
     const { cartItems } = this.state;
+    // const numOfItems = cartItems;
     const numOfItems = cartItems.slice();
     return numOfItems.filter((product) => id === product.id).length;
   }
 
   getSubtotal() {
     const { sumItems } = this.state;
-    return sumItems.reduce((acc, curr) => acc + curr, 0);
+    const result = sumItems.reduce((acc, curr) => acc + curr, 0);
+    console.log(result);
+    return result;
   }
 
-  formHandler = ({ target: { name, value } }) => {
-    this.setState((prevState) => ({
-      reviewForm: {
-        ...prevState.reviewForm,
-        [name]: value,
-      },
-    }), () => this.validadeSubmission());
-  }
-
-  validadeSubmission = () => {
-    const {
-      customerForm: {
-        fullName,
-        email,
-        cpf,
-        address,
-        cep,
-        phone,
-        homeNumber,
-        city,
-        estate,
-        complement,
-      },
-    } = this.state;
-    const errorCases = [
-      !fullName.length,
-      !email.length,
-      !cpf,
-      !address,
-      !cep,
-      !phone,
-      !homeNumber,
-      !city,
-      !estate,
-      !complement,
-    ];
-    const validForm = errorCases
-      .every((error) => error === false);
+  setSubtotal(total) {
+    const { subtotal } = this.state;
     this.setState({
-      validForm,
+      subtotal: subtotal + total,
     });
   }
+
+  // formHandler = ({ target: { value } }) => {
+  //   // const { name } = this.state;
+  //   this.setState((prevState) => ({
+  //     customerForm: {
+  //       ...prevState.customerForm,
+  //       name: value,
+  //     },
+  //   }), () => this.validadeSubmission());
+  // }
+
+  // validadeSubmission = () => {
+  //   const {
+  //     customerForm: {
+  //       fullName,
+  //       email,
+  //       cpf,
+  //       address,
+  //       cep,
+  //       phone,
+  //       homeNumber,
+  //       city,
+  //       estate,
+  //       complement,
+  //     },
+  //   } = this.state;
+  //   const errorCases = [
+  //     !fullName.length,
+  //     !email.length,
+  //     !cpf,
+  //     !address,
+  //     !cep,
+  //     !phone,
+  //     !homeNumber,
+  //     !city,
+  //     !estate,
+  //     !complement,
+  //   ];
+  //   const validForm = errorCases
+  //     .every((error) => error === false);
+  //   this.setState({
+  //     validForm,
+  //   });
+  // }
 
   filterCartItems = () => {
     const { cartItems } = this.state;
@@ -104,14 +113,28 @@ class Checkout extends Component {
     });
   };
 
+  setSubtotal = () => {
+    const { filteredCartItems } = this.state;
+    const result = filteredCartItems
+      .reduce((acc, curr) => acc + (curr.price * this.getProductQuantity(curr.id)), 0);
+    console.log(result);
+    return result;
+  }
+
   totalPrice(price, id) {
     const quantity = this.getProductQuantity(id);
+    console.log(price);
+    console.log(quantity);
     const total = quantity * price;
     return total;
   }
 
   render() {
-    const { filteredCartItems, sumItems } = this.state;
+    const { filteredCartItems,
+      customerForm: { name, email, address,
+        cpf, cep, phone, homeNumber, estate, city, complement },
+      isValid,
+    } = this.state;
     return (
       <>
         <div>
@@ -134,111 +157,29 @@ class Checkout extends Component {
                 <p>
                   {`Total de itens ${this.getProductQuantity(item.id)}`}
                 </p>
-                <span>{`Total: R$ ${this.totalPrice(item.price, item.id)}`}</span>
-                {sumItems.push(this.totalPrice(item.price, item.id))}
-                {console.log(sumItems)}
+                <span>
+                  {`Total: R$ ${this.totalPrice(item.price, item.id)
+                    .toFixed(2)}`}
+                </span>
               </div>
             ))}
             <div>
-              <h1>{`Subtotal: R$ ${this.getSubtotal()}`}</h1>
+              <h1>{`Subtotal: R$ ${this.setSubtotal().toFixed(2)}`}</h1>
             </div>
           </fieldset>
         </div>
         <br />
         <div>
-          <fieldset>
-            <h3>Informações do Comprador</h3>
-            <input
-              type="text"
-              name="full-name"
-              placeholder="Obrigatório"
-              value="Nome Completo"
-              onChange={ this.formHandler }
-              data-testid="checkout-fullname"
-            />
-            <input
-              type="text"
-              name="email"
-              placeholder="Obrigatório"
-              value="email"
-              onChange={ this.formHandler }
-              data-testid="checkout-email"
-            />
-            <input
-              type="text"
-              name="address"
-              placeholder="Obrigatório"
-              value="Endereço"
-              onChange={ this.formHandler }
-              data-testid="checkout-address"
-            />
-            <input
-              type="text"
-              name="cpf"
-              placeholder="Obrigatório"
-              value="CPF"
-              onChange={ this.formHandler }
-              data-testid="checkout-cpf"
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Obrigatório"
-              value="Telefone"
-              onChange={ this.formHandler }
-              data-testid="checkout-phone"
-            />
-            <input
-              type="text"
-              name="cep"
-              placeholder="Obrigatório"
-              value="CEP"
-              onChange={ this.formHandler }
-              data-testid="checkout-cep"
-            />
-          </fieldset>
-          <br />
-          <fieldset>
-            <h3>Método de Pagamento</h3>
-            <div>
-              Boleto
-              <input
-                type="radio"
-                name="rating"
-                id="1-rating"
-                value="1"
-                // onChange={ this.formHandler }
-              />
-            </div>
-            <div>
-              Cartão de Crédito
-              <input
-                type="radio"
-                name="rating"
-                id="1-rating"
-                value="2"
-                // onChange={ this.formHandler }
-              />
-              <input
-                type="radio"
-                name="rating"
-                id="1-rating"
-                value="3"
-                // onChange={ this.formHandler }
-              />
-              <input
-                type="radio"
-                name="rating"
-                id="1-rating"
-                value="4"
-                // onChange={ this.formHandler }
-              />
-            </div>
-          </fieldset>
+          <Form
+            state={ { customerForm:
+          { name, email, address, cpf, cep, phone, homeNumber, estate, city, complement },
+            } }
+          />
         </div>
         <button
           type="button"
           value="Comprar"
+          disabled={ !isValid }
         >
           Comprar
         </button>
