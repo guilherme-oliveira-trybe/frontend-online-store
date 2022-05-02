@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Cart extends Component {
   constructor() {
@@ -113,7 +114,6 @@ class Cart extends Component {
             Seu carrinho está vazio
           </h2>
         ) : (
-          // filteredCartItems.map(({ id, thumbnail, title, price }, index) => (
           filteredCartItems.map((item) => (
             <div key={ item.id }>
               <h1 data-testid="shopping-cart-product-name">{item.title}</h1>
@@ -143,6 +143,14 @@ class Cart extends Component {
             </div>
           ))
         )}
+        <Link to="/checkout" data-testid="checkout-products">
+          <button
+            type="button"
+            value="Finalizar"
+          >
+            Finalizar Compra
+          </button>
+        </Link>
       </div>
     );
   }
