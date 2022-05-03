@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class Card extends Component {
   render() {
-    const { productId, thumbnail, title, price, onClick } = this.props;
+    const { productId, thumbnail, title, price, onClick, shipping } = this.props;
     return (
       <div>
         <Link
@@ -20,6 +20,7 @@ class Card extends Component {
             {' '}
             {`R$ ${price}`}
           </p>
+          { shipping && <p data-testid="free-shipping"> Frete Grátis </p> }
         </Link>
         <input
           data-testid="product-add-to-cart"

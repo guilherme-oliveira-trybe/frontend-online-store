@@ -47,6 +47,7 @@ class Categories extends Component {
 
   render() {
     const { categories, itemsResult } = this.state;
+    // console.log(itemsResult[0].shipping.free_shipping);
     return (
       <>
         <div className="navigation-container">
@@ -66,7 +67,6 @@ class Categories extends Component {
             ))}
           </nav>
         </div>
-
         <div className="product-container">
           {itemsResult
             .map((product) => (
@@ -80,6 +80,7 @@ class Categories extends Component {
                   thumbnail={ product.thumbnail }
                   price={ product.price }
                   onClick={ () => this.sendToCart(product) }
+                  shipping={ product.shipping.free_shipping }
                 />
               </div>
             ))}

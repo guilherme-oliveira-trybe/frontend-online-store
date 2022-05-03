@@ -52,6 +52,7 @@ class Product extends Component {
   getItemAttributes = () => {
     const { productDetails } = this.state;
     const productAttributes = productDetails.attributes;
+    // console.log(productDetails.shipping.free_shipping);
     this.setState({
       productAttributes,
     });
@@ -76,9 +77,15 @@ class Product extends Component {
         price,
         title,
         thumbnail,
+        shipping,
       },
       productAttributes,
     } = this.state;
+    let result = false;
+    if (shipping) {
+      result = shipping.free_shipping;
+    }
+
     return (
       <section>
         <div>
@@ -109,6 +116,7 @@ class Product extends Component {
                 { condition === 'new' ? <p>Novo</p> : <p>Usado</p> }
                 <h1 data-testid="product-detail-name">{title}</h1>
                 <p>{`R$ ${price}`}</p>
+                { result && <p data-testid="free-shipping"> Frete Grátis </p> }
                 <input
                   data-testid="product-detail-add-to-cart"
                   type="button"
