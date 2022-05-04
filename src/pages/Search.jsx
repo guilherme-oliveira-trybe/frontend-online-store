@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Card from '../components/Card';
 import { itemName } from '../services/api';
 
@@ -18,20 +19,6 @@ class Search extends Component {
     JSON.parse(localStorage.getItem('cartItems'));
   }
 
-  sendToCart = (productObj) => {
-    this.addToLocalStorage(productObj);
-  }
-
-  addToLocalStorage = (productObj) => {
-    if (!JSON.parse(localStorage.getItem('cartItems'))) {
-      localStorage.setItem('cartItems', JSON.stringify([]));
-    } else {
-      const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
-      const CartItems = [...prevCartItems, productObj];
-      localStorage.setItem('cartItems', JSON.stringify(CartItems));
-    }
-  }
-
   inputHandleChange = ({ target }) => {
     const { value } = target;
     this.setState({ search: value });
@@ -48,6 +35,7 @@ class Search extends Component {
 
   render() {
     const { search, itemsResult } = this.state;
+    const { sendToCart } = this.props;
     const minLenght = 0;
     return (
       <div>
@@ -78,7 +66,7 @@ class Search extends Component {
                   title={ product.title }
                   thumbnail={ product.thumbnail }
                   price={ product.price }
-                  onClick={ () => this.sendToCart(product) }
+                  onClick={ () => sendToCart(product) }
                 />
               </div>
             ))}
@@ -87,5 +75,9 @@ class Search extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  sendToCart: PropTypes.func,
+}.isRequired;
 
 export default Search;
