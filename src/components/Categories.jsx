@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getCategories, itemCategory } from '../services/api';
 import Card from './Card';
 import './Categories.css';
@@ -19,20 +20,6 @@ class Categories extends Component {
     });
   }
 
-  sendToCart = (productObj) => {
-    this.addToLocalStorage(productObj);
-  }
-
-  addToLocalStorage = (productObj) => {
-    if (!JSON.parse(localStorage.getItem('cartItems'))) {
-      localStorage.setItem('cartItems', JSON.stringify([]));
-    } else {
-      const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
-      const CartItems = [...prevCartItems, productObj];
-      localStorage.setItem('cartItems', JSON.stringify(CartItems));
-    }
-  }
-
   onClick = async ({ target }) => {
     const { id } = target;
     await this.itemCategory(id);
@@ -46,8 +33,8 @@ class Categories extends Component {
   }
 
   render() {
+    const { sendToCart } = this.props;
     const { categories, itemsResult } = this.state;
-    // console.log(itemsResult[0].shipping.free_shipping);
     return (
       <>
         <div className="navigation-container">
@@ -79,7 +66,7 @@ class Categories extends Component {
                   title={ product.title }
                   thumbnail={ product.thumbnail }
                   price={ product.price }
-                  onClick={ () => this.sendToCart(product) }
+                  onClick={ () => sendToCart(product) }
                   shipping={ product.shipping.free_shipping }
                 />
               </div>
@@ -89,5 +76,9 @@ class Categories extends Component {
     );
   }
 }
+
+Categories.propTypes = {
+  sendToCart: PropTypes.func,
+}.isRequired;
 
 export default Categories;
