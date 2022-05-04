@@ -58,18 +58,8 @@ class Product extends Component {
     });
   }
 
-  sendtToCart = () => {
-    this.addToLocalStorage();
-  }
-
-  addToLocalStorage = () => {
-    const { productDetails } = this.state;
-    const prevCartItems = JSON.parse(localStorage.getItem('cartItems'));
-    const cartItems = [...prevCartItems, productDetails];
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }
-
   render() {
+    const { numOfCartItems, sendToCart } = this.props;
     const {
       loading,
       productDetails: {
@@ -79,6 +69,7 @@ class Product extends Component {
         thumbnail,
         shipping,
       },
+      productDetails,
       productAttributes,
     } = this.state;
     let result = false;
@@ -88,21 +79,21 @@ class Product extends Component {
 
     return (
       <section>
-        <div>
-          <nav>
-            <Link
-              to="/"
+        <nav>
+          <Link to="/cart" data-testid="shopping-cart-button">
+            <button
+              type="button"
+              value="Carrinho"
             >
-              Voltar
-            </Link>
-            <Link
-              to="/cart"
-              data-testid="shopping-cart-button"
-            >
-              Carrinho
-            </Link>
-          </nav>
-        </div>
+              Seu carrinho
+              {' '}
+              <i className="fa fa-shopping-cart" />
+              <span data-testid="shopping-cart-size">
+                {numOfCartItems}
+              </span>
+            </button>
+          </Link>
+        </nav>
         { loading
           ? <Loading /> : (
             <>
@@ -121,7 +112,7 @@ class Product extends Component {
                   data-testid="product-detail-add-to-cart"
                   type="button"
                   value="Adicionar ao carrinho"
-                  onClick={ () => this.sendtToCart() }
+                  onClick={ () => sendToCart(productDetails) }
                 />
               </div>
               <div className="product-description">
@@ -152,6 +143,8 @@ Product.propTypes = {
       id: PropTypes.string,
     }),
   }),
+  numOfCartItems: PropTypes.number,
+  sendToCart: PropTypes.func,
 }.isRequired;
 
 export default Product;
